@@ -1,0 +1,67 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=wikiuser
+    volumes:
+      - ./.data/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  web: &app
+    image: mediawiki
+    build: .
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      - ./.data/web:/data:rw
+      - ./CustomSettings.php:/conf/CustomSettings.php
+      - ./dev/cron_job.sh:/cron_job.sh
+    environment:
+      - MEDIAWIKI_SITE_SERVER=http://localhost:8080
+      - MEDIAWIKI_SITE_NAME=My Awesome Wiki
+      - MEDIAWIKI_DB_HOST=db
+      - MEDIAWIKI_DB_PASSWORD=password
+      - MEDIAWIKI_EXTENSIONS=VisualEditor,WikiEditor,ParserFunctions,Cite,TemplateData,Scribunto,InputBox,Widgets,Maps,Math,LiquidThreads,Variables,RightFunctions,PageInCat,CategoryTree,LabeledSectionTransclusion,UserPageEditProtection,Quiz,UploadWizard,Collection,DynamicPageList,EmbedPage,UWUBCMessages,GoogleAnalyticsMetrics,googleAnalytics,Renameuser,caliper
+      - MEDIAWIKI_ALLOW_SITE_CSS_ON_RESTRICTED_PAGES=true
+      - PARSOID_URL=http://nodeservices:8142
+      - PARSOID_DOMAIN=localhost
+      - RESTBASE_URL=http://nodeservices:7231
+      - LDAP_DOMAIN=CWL
+      - LDAP_SERVER=ldap
+      - LDAP_SEARCH_ATTRS=cn
+      - LDAP_PROXY_AGENT=cn=admin,dc=example,dc=org
+      - LDAP_PROXY_PASSWORD=admin
+      - LDAP_BASE_DN=dc=example,dc=org
+      - MEDIAWIKI_MAIN_CACHE=CACHE_NONE
+      - LDAP_DEBUG=3
+      - DEBUG=true
+  worker: &worker
+    <<: *app
+    command: /cron_job.sh
+    ports:
+      - 8081:80
+
+  nodeservices:
+    image: ubcctlt/mediawiki-node-services
+    ports:
+      - 7231:7231
+    environment:
+      - MEDIAWIKI_API_URL=http://web/api.php
+      - LOG_LEVEL=debug
+    volumes:
+      - ./.data/services:/data
+  ldap:
+    image: osixia/openldap:1.1.9
+    command: --copy-service
+    ports:
+      - 1389:389
+    volumes:
+      - ./dev/ldapadd_ubcedu.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/ldapadd_ubcedu.ldif
+      - ./.data/ldap:/var/lib/ldap
+      - ./.data/slapd.d:/etc/ldap/slapd.d
+  memcached:
+    image: memcached:1.5-alpine

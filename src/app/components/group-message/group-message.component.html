@@ -1,0 +1,12 @@
+<div class="message-bubble d-flex mb-1">
+    <div class="message-section" *ngIf="message.senderId !== userId">
+        <div class="col-xs-12">
+            <span class="is-5 mb-0 mt-0 profile-name">{{ message.senderName }}</span>
+        </div>
+        <div class="message-text col-xs-12">{{ message.message }}</div>
+    </div>
+    <div class="message-section message-section-auto" *ngIf="message.senderId === userId">
+        <div class="message-text col-xs-12">{{ message.message }}</div>
+    </div>
+</div>
+  

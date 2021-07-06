@@ -1,0 +1,50 @@
+.message-bubble {
+    width: 100%;
+    .message-section {
+        // margin-left: auto;
+        background: var(--blue);
+        color: var(--secondary);
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 10px 20px;
+    }
+    .message-section-auto {
+        margin-left: auto;
+    }
+    .message-text {
+    //   background: var(--white);
+      padding: 8px;
+    //   border-radius: 8px;
+    //   max-width: 65%;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 5px 2px;
+      overflow-wrap: break-word;
+    }
+  
+    // &.sender {
+    //   .message-text {
+    //     margin-left: auto;
+    //     background: var(--blue);
+    //     color: var(--secondary);
+    //   }
+    // }
+  }
+  
+//   @media (min-width: 767.98px) {
+//     .message-bubble {
+//       .message-text {
+//         max-width: 60%;
+//       }
+//     }
+//   }
+  
+//   @media (min-width: 1399.98px) {
+//     .message-bubble {
+//       .message-text {
+//         max-width: 50%;
+//         font-size: 16px;
+//       }
+//     }
+//   }
+  

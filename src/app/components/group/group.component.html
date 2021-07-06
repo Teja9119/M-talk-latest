@@ -1,0 +1,19 @@
+
+<div class="chat d-flex">
+    <a class="d-flex w-100" [routerLink]="inbox.objectId">
+      <img
+        class="profile-pic"
+        src="./../../../assets/avatar-7.jpg"
+        alt="profile-pic"
+      />
+      <div class="chat-sender-info">
+        <div class="d-flex w-100 flex-v-centered justify-content-between">
+          <h5 class="mb-0 mt-0 profile-name">
+            {{ inbox.sender.groupname }}
+          </h5>
+          <p class="mb-0 text-muted chat-last-date">4/23/21</p>
+        </div>
+        <p class="mb-0 text-muted chat-last-massage">{{ inbox.sender.description }}</p>
+      </div>
+    </a>
+  </div>

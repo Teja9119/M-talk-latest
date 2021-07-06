@@ -1,0 +1,69 @@
+<div class="messages-wrapper d-flex flex-column">
+  <div class="header d-flex">
+    <div class="d-flex">
+      <a routerLink="/groups" class="header-back-btn">
+        <span class="material-icons">arrow_back_ios</span>
+      </a>
+      <img
+        class="profile-pic"
+        src="./../../../assets/avatar-7.jpg"
+        alt="profile-pic"
+      />
+      <div>
+        <h5 class="is-5 mb-0 mt-0 profile-name">
+          {{ sender.groupname }}
+        </h5>
+        <p class="mb-0 text-muted is-7">{{ sender.description }}</p>
+      </div>
+    </div>
+    <div class="ml-auto flex-hv-centered info-btn-outer">
+      <p class="mb-0 mr-2">Messages are end to encrypted</p>
+      <span class="material-icons">info</span>
+    </div>
+    <div class="member-btn-outer">
+      <button type="button" (click)="opemMemberList()">
+        <span class="material-icons">view_list</span>
+      </button>      
+    </div>
+  </div>
+
+   <!-- Start add group Modal -->
+   <div class="modal" id="member-list" tabindex="-1" role="dialog"
+   aria-labelledby="addgroup-exampleModalLabel" aria-hidden="true" [ngClass]="{'group-model': enableMemberList}">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-size-16" id="addgroup-exampleModalLabel">Members List</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMemberList()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4">
+                    <div class="form-group mb-4">
+                      <div>
+                        <ul class="list-unstyled contact-list">
+                            <li *ngFor="let member of sender.members; let i = index">
+                              <div class="py-3 font-weight-bold brand-orange">
+                                {{member.memberName | titlecase}}
+                              </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+   </div>
+<!-- End add group Modal -->
+
+  <div class="messages" #view>
+    <app-group-message
+      *ngFor="let message of messages"
+      [message]="message"
+    ></app-group-message>
+  </div>
+  <app-message-form
+    class="message-form-outer"
+    (send)="sendMessage($event)"
+  ></app-message-form>
+</div>

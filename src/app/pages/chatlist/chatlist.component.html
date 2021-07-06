@@ -1,0 +1,51 @@
+<div class="d-flex">
+  <div [ngClass]="{ 'hide-chat-list': hideChatList }" class="chat-list-outer">
+    <div class="d-flex align-items-center justify-content-between mt-4 mb-1">
+      <h4 class="chatlist-title">Chats</h4>
+      <div class="dropdown">
+        <label class="btn btn-link" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="material-icons">more_vert</span>
+        </label>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item">New Group</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group mb-4">
+        <div class="input-group-prepend">
+          <span class="input-group-text search-input-icon">
+            <span class="material-icons">search</span>
+          </span>
+        </div>
+        <input
+          class="form-control search-input"
+          [(ngModel)]="searchText"
+          placeholder="Search"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <app-chat
+      *ngFor="let inbox of inboxes | inboxFilter: searchText"
+      [inbox]="inbox"
+    ></app-chat>
+  </div>
+  <div [ngClass]="{ 'participate-list-outer': showarPticipets }" class="hide-chat-list">
+    <div class="d-flex align-items-center justify-content-between mt-4 mb-1">
+      <a class="header-back-btn">
+        <span class="material-icons">arrow_back_ios</span>
+      </a>
+      <h4 class="chatlist-title">Add group participets</h4>
+    </div>
+  </div>
+  <div
+    #messages
+    [ngClass]="{ 'show-message': hideChatList }"
+    class="message-outer"
+  >
+    <router-outlet></router-outlet>
+  </div>
+</div>

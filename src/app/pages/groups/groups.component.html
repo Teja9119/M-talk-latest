@@ -1,0 +1,123 @@
+<div class="d-flex">
+  <div [ngClass]="{ 'hide-chat-list': hideChatList }" class="chat-list-outer">
+    <div class="d-flex align-items-center justify-content-between mt-4 mb-4">
+      <h4>Groups</h4>
+      <div class="user-chat-nav">
+        <button type="button" class="btn btn-link" (click)="addGruop()">
+          <span class="material-icons">more_vert</span>
+        </button>
+      </div>
+    </div>
+    <!-- Start add group Modal -->
+    <div class="modal" id="addgroup-exampleModal" tabindex="-1" role="dialog"
+    aria-labelledby="addgroup-exampleModalLabel" aria-hidden="true" [ngClass]="{'group-model': enableAddGroup}">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-size-16" id="addgroup-exampleModalLabel">Create New Group
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeGroup()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4">
+                <form [formGroup]="createGroup" (ngSubmit)="onSubmit()">
+                    <div class="form-group mb-4">
+                        <label for="addgroupname-input"
+                            [ngClass]="{'error': submitted && f.groupName.errors}">Group Name</label>
+                        <input type="text" class="form-control" formControlName="groupName"
+                            [ngClass]="{'error': submitted && f.groupName.errors}"
+                            placeholder="Enter Group Name">
+                        <!-- error block -->
+                        <div class="invalid-feedback" *ngIf="submitted && f.groupName.errors?.required">
+                            <sup>*</sup>Enter Group Name
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label [ngClass]="{'error': submitted && f.groupMember.errors}">Group Members</label>
+                        <div class="mb-3">
+                            <button class="btn btn-secondary btn-sm" type="button"  data-bs-toggle="collapse"
+                            data-bs-target="#groupmembercollapse" aria-expanded="false"
+                                aria-controls="groupmembercollapse">
+                                Select Members
+                            </button>
+                        </div>
+                        <div class="collapse" id="groupmembercollapse">
+                            <div class="card border">
+                                <div class="card-header">
+                                    <span class="font-size-15 mb-0">Contacts</span>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div data-simplebar style="max-height: 150px;">
+                                        <div>
+                                            <!-- <div class="p-3 font-weight-bold text-primary">
+                                                A
+                                            </div> -->
+
+                                            <ul class="list-unstyled contact-list">
+                                                <li *ngFor="let contact of contactList;let i = index">
+                                                  <div class="py-3 font-weight-bold brand-orange" *ngIf="checkIfNewAlphabet(contact.firstName)">
+                                                    {{contact.firstName.charAt(0) | uppercase}}
+                                                </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                            class="custom-control-input" id="member{{i}}" [value]="contact.uid" (change)="selectGroupMembers($event)">
+                                                        <label class="custom-control-label text-capitalize" for="member{{i}}">{{contact.firstName}} {{contact.lastName}}</label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" *ngIf="submitted && f.groupMember.errors?.required">
+                          <sup>*</sup>Enter Group Member
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addgroupdescription-input">Description</label>
+                        <textarea class="form-control" formControlName="groupDescription" rows="3"
+                            placeholder="Enter Description"></textarea>
+                    </div>
+                    <!-- <button type="button" class="btn btn-link" data-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary">Create Group</button>
+                </form>
+                <button type="button" class="btn-hidden" id="modalClose" data-dismiss="modal" hidden></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End add group Modal -->
+
+
+    <div class="form-group">
+      <div class="input-group mb-4">
+        <div class="input-group-prepend">
+          <span class="input-group-text search-input-icon">
+            <span class="material-icons">search</span>
+          </span>
+        </div>
+        <input
+          class="form-control search-input"
+          [(ngModel)]="searchText"
+          placeholder="Search"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <app-group
+      *ngFor="let inbox of inboxes | groupFilter: searchText"
+      [inbox]="inbox"
+    ></app-group>
+  </div>
+  <div
+    #messages
+    [ngClass]="{ 'show-message': hideChatList }"
+    class="message-outer"
+  >
+    <router-outlet></router-outlet>
+  </div>
+</div>
